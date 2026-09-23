@@ -117,176 +117,178 @@ const Home = () => {
     };
 
     return (
-        <div className="min-h-screen bg-purple-50 px-4 py-10 text-gray-800">
-            <div className="mx-auto max-w-5xl">
+      <div className="py-20 bg-slate-100 px-4 py-10 font-inter text-slate-800">
+    <div className="mx-auto max-w-5xl">
 
-                <div className="mb-8 rounded-2xl bg-purple-700 p-8 text-white shadow-lg">
-                    <p className="text-sm uppercase tracking-widest text-purple-200">
-                        Task Management
-                    </p>
+        <div className="mb-8 border-b border-slate-200 bg-white px-7 py-8 shadow-sm">
+            <p className="text-xs font-semibold uppercase tracking-[0.3em] text-indigo-600">
+                Task Management
+            </p>
 
-                    <h1 className="mt-3 text-3xl font-bold">
-                        Your Daily Tasks
-                    </h1>
+            <h1 className="mt-2 font-dm-serif text-4xl text-slate-900">
+                Your Daily Tasks
+            </h1>
+
+            <div className="mt-4 h-0.5 w-12 bg-indigo-500" />
+        </div>
+
+        <div className="grid gap-6 lg:grid-cols-[1.1fr_2fr]">
+
+            <form
+                onSubmit={handleSubmit}
+                className="border border-slate-200 bg-white p-6 shadow-sm"
+            >
+                <h2 className="mb-6 font-dm-serif text-2xl text-slate-900">
+                    {editingId ? "Edit Task" : "Add New Task"}
+                </h2>
+
+                <label className="mb-2 block text-sm font-semibold text-slate-700">
+                    Task Name
+                </label>
+
+                <input
+                    type="text"
+                    value={form.name}
+                    onChange={(event) =>
+                        setForm({ ...form, name: event.target.value })
+                    }
+                    placeholder="Enter task name"
+                    className="w-full border border-slate-300 bg-slate-50 px-3 py-2.5 text-sm outline-none transition focus:border-indigo-500 focus:bg-white focus:ring-2 focus:ring-indigo-100"
+                />
+
+                <label className="mb-2 mt-5 block text-sm font-semibold text-slate-700">
+                    Status
+                </label>
+
+                <select
+                    value={form.isComplete}
+                    onChange={(event) =>
+                        setForm({ ...form, isComplete: event.target.value })
+                    }
+                    className="w-full border border-slate-300 bg-slate-50 px-3 py-2.5 text-sm outline-none transition focus:border-indigo-500 focus:bg-white focus:ring-2 focus:ring-indigo-100"
+                >
+                    <option value="no">Not Completed</option>
+                    <option value="yes">Completed</option>
+                </select>
+
+                <div className="mt-6 flex gap-3">
+
+                    <button
+                        type="submit"
+                        disabled={loading}
+                        className="flex-1 bg-slate-900 px-4 py-2.5 text-sm font-semibold text-white transition hover:bg-indigo-700 disabled:bg-slate-300"
+                    >
+                        {loading
+                            ? editingId
+                                ? "Updating..."
+                                : "Saving..."
+                            : editingId
+                            ? "Update Task"
+                            : "Add Task"}
+                    </button>
+
+                    {editingId && (
+                        <button
+                            type="button"
+                            onClick={resetForm}
+                            className="border border-slate-300 px-4 py-2.5 text-sm font-semibold text-slate-600 transition hover:bg-slate-100"
+                        >
+                            Cancel
+                        </button>
+                    )}
+                </div>
+            </form>
+
+            <div className="border border-slate-200 bg-white p-6 shadow-sm">
+
+                <div className="mb-5 flex items-center justify-between border-b border-slate-100 pb-4">
+                    <h2 className="font-dm-serif text-2xl text-slate-900">
+                        Task List
+                    </h2>
+
+                    <span className="border border-indigo-100 bg-indigo-50 px-3 py-1 text-xs font-semibold text-indigo-600">
+                        {tasks.length} Items
+                    </span>
                 </div>
 
-                <div className="grid gap-8 lg:grid-cols-[1.1fr_2fr]">
+                <div className="space-y-3">
 
-                    <form
-                        onSubmit={handleSubmit}
-                        className="rounded-2xl bg-white p-6 shadow-md"
-                    >
-                        <h2 className="mb-5 text-xl font-bold text-purple-700">
-                            {editingId ? "Edit Task" : "Add New Task"}
-                        </h2>
-
-                        <label className="mb-2 block text-sm font-semibold text-gray-700">
-                            Task Name
-                        </label>
-
-                        <input
-                            type="text"
-                            value={form.name}
-                            onChange={(event) =>
-                                setForm({ ...form, name: event.target.value })
-                            }
-                            placeholder="Enter task name"
-                            className="w-full rounded-lg border border-purple-200 px-3 py-2.5 outline-none focus:border-purple-500 focus:ring-2 focus:ring-purple-100"
-                        />
-
-                        <label className="mb-2 mt-5 block text-sm font-semibold text-gray-700">
-                            Status
-                        </label>
-
-                        <select
-                            value={form.isComplete}
-                            onChange={(event) =>
-                                setForm({ ...form, isComplete: event.target.value })
-                            }
-                            className="w-full rounded-lg border border-purple-200 px-3 py-2.5 outline-none focus:border-purple-500 focus:ring-2 focus:ring-purple-100"
-                        >
-                            <option value="no">Not Completed</option>
-                            <option value="yes">Completed</option>
-                        </select>
-
-                        <div className="mt-6 flex gap-3">
-
-                            <button
-                                type="submit"
-                                disabled={loading}
-                                className="flex-1 rounded-lg bg-purple-600 px-4 py-2.5 font-semibold text-white hover:bg-purple-700 disabled:bg-purple-300"
+                    {tasks.length === 0 ? (
+                        <div className="border border-dashed border-slate-300 bg-slate-50 p-6 text-center text-sm text-slate-500">
+                            No tasks yet. Add your first task.
+                        </div>
+                    ) : (
+                        tasks.map((task) => (
+                            <div
+                                key={task._id}
+                                className="flex items-center justify-between gap-3 border border-slate-200 bg-slate-50 p-4 transition hover:border-indigo-200 hover:bg-white"
                             >
-                                {loading
-                                    ? editingId
-                                        ? "Updating..."
-                                        : "Saving..."
-                                    : editingId
-                                    ? "Update Task"
-                                    : "Add Task"}
-                            </button>
 
-                            {editingId && (
-                                <button
-                                    type="button"
-                                    onClick={resetForm}
-                                    className="rounded-lg border border-gray-300 px-4 py-2.5 font-semibold text-gray-600 hover:bg-gray-100"
-                                >
-                                    Cancel
-                                </button>
-                            )}
-                        </div>
-                    </form>
+                                <div className="flex items-center gap-3">
 
-                    <div className="rounded-2xl bg-white p-6 shadow-md">
+                                    <button
+                                        type="button"
+                                        onClick={() => handleToggleStatus(task)}
+                                        className={`h-5 w-5 rounded-full border-2 ${
+                                            task.isComplete === "yes"
+                                                ? "border-emerald-500 bg-emerald-500"
+                                                : "border-slate-300 bg-white"
+                                        }`}
+                                        aria-label={`Toggle task status for ${task.name}`}
+                                    />
 
-                        <div className="mb-5 flex items-center justify-between">
-                            <h2 className="text-xl font-bold text-purple-700">
-                                Task List
-                            </h2>
+                                    <div>
+                                        <p
+                                            className={`text-sm font-semibold ${
+                                                task.isComplete === "yes"
+                                                    ? "text-slate-400 line-through"
+                                                    : "text-slate-800"
+                                            }`}
+                                        >
+                                            {task.name}
+                                        </p>
 
-                            <span className="rounded-full bg-purple-100 px-3 py-1 text-xs font-semibold text-purple-700">
-                                {tasks.length} Items
-                            </span>
-                        </div>
-
-                        <div className="space-y-3">
-
-                            {tasks.length === 0 ? (
-                                <div className="rounded-xl border border-dashed border-purple-200 bg-purple-50 p-6 text-center text-gray-500">
-                                    No tasks yet. Add your first task.
-                                </div>
-                            ) : (
-                                tasks.map((task) => (
-                                    <div
-                                        key={task._id}
-                                        className="flex items-center justify-between gap-3 rounded-xl border border-purple-100 bg-purple-50 p-4"
-                                    >
-
-                                        <div className="flex items-center gap-3">
-
-                                            <button
-                                                type="button"
-                                                onClick={() => handleToggleStatus(task)}
-                                                className={`h-5 w-5 rounded-full border-2 ${
-                                                    task.isComplete === "yes"
-                                                        ? "border-green-500 bg-green-500"
-                                                        : "border-gray-300 bg-white"
-                                                }`}
-                                                aria-label={`Toggle task status for ${task.name}`}
-                                            />
-
-                                            <div>
-                                                <p
-                                                    className={`font-semibold ${
-                                                        task.isComplete === "yes"
-                                                            ? "text-gray-400 line-through"
-                                                            : "text-gray-800"
-                                                    }`}
-                                                >
-                                                    {task.name}
-                                                </p>
-
-                                                <p className="text-xs text-gray-500">
-                                                    {task.isComplete === "yes"
-                                                        ? "Completed"
-                                                        : "Not Completed"}
-                                                </p>
-                                            </div>
-                                        </div>
-
-                                        <div className="flex gap-2">
-
-                                            <button
-                                                type="button"
-                                                onClick={() => handleEdit(task._id)}
-                                                className="rounded-lg bg-purple-100 px-3 py-1.5 text-sm font-semibold text-purple-700 hover:bg-purple-200"
-                                            >
-                                                Edit
-                                            </button>
-
-                                            <button
-                                                type="button"
-                                                onClick={() => handleDelete(task._id)}
-                                                className="rounded-lg bg-red-100 px-3 py-1.5 text-sm font-semibold text-red-600 hover:bg-red-200"
-                                            >
-                                                Delete
-                                            </button>
-
-                                        </div>
+                                        <p className="mt-0.5 text-xs text-slate-500">
+                                            {task.isComplete === "yes"
+                                                ? "Completed"
+                                                : "Not Completed"}
+                                        </p>
                                     </div>
-                                ))
-                            )}
-                        </div>
-                    </div>
+                                </div>
+
+                                <div className="flex gap-2">
+
+                                    <button
+                                        type="button"
+                                        onClick={() => handleEdit(task._id)}
+                                        className="border border-indigo-100 bg-white px-3 py-1.5 text-sm font-semibold text-indigo-600 transition hover:bg-indigo-50"
+                                    >
+                                        Edit
+                                    </button>
+
+                                    <button
+                                        type="button"
+                                        onClick={() => handleDelete(task._id)}
+                                        className="border border-red-100 bg-white px-3 py-1.5 text-sm font-semibold text-red-600 transition hover:bg-red-50"
+                                    >
+                                        Delete
+                                    </button>
+
+                                </div>
+                            </div>
+                        ))
+                    )}
                 </div>
             </div>
-
-            <ToastContainer
-                position="top-right"
-                autoClose={2500}
-                hideProgressBar
-            />
         </div>
+    </div>
+
+    <ToastContainer
+        position="top-right"
+        autoClose={2500}
+        hideProgressBar
+    />
+</div>
     );
 };
 

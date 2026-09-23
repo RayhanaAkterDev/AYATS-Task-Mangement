@@ -2,6 +2,11 @@
 
 @import "tailwindcss";
 
+@theme {
+    --font-inter: "Inter", sans-serif;
+    --font-dm-serif: "DM Serif Display", serif;
+}
+
 body{
       font-family: "Inter", sans-serif;
 }
