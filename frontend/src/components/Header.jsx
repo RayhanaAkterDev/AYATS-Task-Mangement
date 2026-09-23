@@ -5,11 +5,11 @@ const Header = () => {
 
             <div className="relative text-center">
                 <p className="mb-2 font-inter text-xs font-semibold uppercase tracking-[0.35em] text-slate-400">
-                    AYATS
+                    DIPTI
                 </p>
 
                 <h1 className="font-dm-serif text-4xl text-white md:text-5xl">
-                    Task Management
+                    MERN Stack Web Development
                 </h1>
 
                 <div className="mx-auto mt-4 h-px w-16 bg-indigo-400" />
